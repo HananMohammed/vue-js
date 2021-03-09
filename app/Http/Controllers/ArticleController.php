@@ -15,7 +15,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::paginate(5);
+        $articles = Article::orderBy("created_at",'desc')->paginate(5);
 
         return ArticleResource::collection($articles);
     }
@@ -87,14 +87,15 @@ class ArticleController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(Request $request)
     {
 
-        if ($request->isMethod('put')){
-            $article = Article::findOrFail($request->artice_id) ;
+        if ($request->isMethod('put'))
+        {
+            $article = Article::findOrFail($request->article_id) ;
+
             $article->title = $request->input('title');
             $article->body = $request->input('body');
-
             $article->save();
             return new ArticleResource($article);
         }
